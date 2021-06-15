@@ -1,0 +1,49 @@
+$LogTime = Get-Date -Format yyyy-MM-dd_hh-mm  
+$LogFile = ".\SearchStringPatch-$LogTime.rtf"  
+ 
+# Add SharePoint PowerShell Snapin  
+  
+  
+if ( (Get-PSSnapin -Name Microsoft.SharePoint.PowerShell -ErrorAction SilentlyContinue) -eq $null ) 
+{  
+    Add-PSSnapin Microsoft.SharePoint.Powershell  
+}  
+  
+$scriptBase = split-path $SCRIPT:MyInvocation.MyCommand.Path -parent  
+Set-Location $scriptBase  
+ 
+#Deleting any .rtf files in the scriptbase location  
+$FindRTFFile = Get-ChildItem $scriptBase\*.* -include *.rtf  
+if($FindRTFFile)  
+{  
+    foreach($file in $FindRTFFile)  
+    {  
+        remove-item $file  
+    }  
+}  
+  
+$TestPath = test-path -path $scriptbase\FileContainingString.txt  
+if($testpath)  
+{  
+   remove-item $scriptbase\FileContainingString.txt  
+}  
+  
+start-transcript $logfile  
+  
+$path = read-host "Enter the path for the log files "  
+$Searchstring = read-host "Enter the string to be searched "  
+$Logs = Get-ChildItem -path $path -recurse -include *.log  
+foreach($Log in $Logs)  
+{  
+    $StringExist = Select-String -Path $log.fullname -pattern $Searchstring  
+    if($StringExist)  
+    {  
+        write-host "String found in " $Log.name -fore green  
+        $log.name | out-file $scriptbase\FileContainingString.txt -append  
+    }  
+    else  
+    {  
+        write-host "String not found in " $Log.name -fore cyan  
+    }  
+}  
+stop-transcript  
