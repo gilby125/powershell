@@ -1,0 +1,7 @@
+Get-Content c:\temp\list.txt | %{
+	New-Object psobject @{
+	    Computername = $_
+	    IP = ([System.Net.Dns]::GetHostAddresses($_) |
+         Select -ExpandProperty ipaddresstostring) -join ','
+	    }
+    }
