@@ -1,0 +1,7 @@
+Import-Module ActiveDirectory
+$domains=(Get-ADForest).domains
+$dcs = foreach ($domain in $domains) {Get-ADDomainController -DomainName $domain -Discover -Service PrimaryDC|select -ExpandProperty hostname}
+ 
+$systems = foreach ($dc in $dcs) {Get-ADComputer -properties * -Filter {(OperatingSystem -like "*Windows*") -and (OperatingSystem -NotLike "*Server*")} -Server $domain |select DNSHostName, IPv4address, OperatingSystem, OperatingsystemServicePack, LastLogonDate
+}
+$systems|Out-GridView
