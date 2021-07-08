@@ -1,0 +1,2 @@
+Get-ADComputer -filter * -Properties OperatingSystemVersion,lastlogondate,OU -SearchBase "OU=Desktops,OU=St Louis,OU=clients,OU=Sigma,DC=global,DC=sial,DC=com" | select name,OperatingSystemVersion, lastlogondate  |
+Where-Object {$_.LastLogonDate -gt (Get-Date).AddDays(-90)} |  Where-Object{$_.operatingsystemversion -eq  "6.1 (7601)"} 
