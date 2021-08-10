@@ -1,0 +1,6 @@
+ForEach ($Drive in Get-PSDrive -PSProvider FileSystem) {
+    $Path = $Drive.Name + ':\Downloads\'
+    Get-ChildItem $Path -Force -Recurse -ErrorAction SilentlyContinue |
+    Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-1) } |
+	Copy-Item -destination "E:\temp\" -Recurse -Force 
+	}
