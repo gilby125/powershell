@@ -1,6 +1,9 @@
 ForEach ($Drive in Get-PSDrive -PSProvider FileSystem) {
-    $Path = $Drive.Name + '\\STLCS01\Blujay\Parcel\ARCHIVE'
-    Get-ChildItem $Path -Force -Recurse -ErrorAction SilentlyContinue |
-    Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-1) } |
-	Copy-Item -destination "\\STLCS01\Blujay\Parcel\daily_files" -Recurse -Force 
-	}
+    $Path =  "C:\Users\m270084\Desktop\source"
+    Get-ChildItem $Path -Include "*.cs" -Force -Recurse  -ErrorAction SilentlyContinue |
+    Where-Object { $_.LastWriteTime -gt (Get-Date).AddDays(-2) } |
+	Copy-Item   -destination "C:\Users\m270084\Desktop\dest" -Recurse -Force 
+        Dir "C:\Users\m270084\Desktop\dest" | rename-item  -ErrorAction SilentlyContinue -newname {  $_.name  -replace ".cs",".xls"  
+     
+}
+}
