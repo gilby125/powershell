@@ -1,0 +1,8 @@
+$conn = new-object System.Data.OleDb.OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\gilby\Downloads\;Extended Properties=dBASE IV;")
+$conn.open() 
+$cmd = new-object System.Data.OleDb.OleDbCommand("select * from sids.dbf",$Conn)
+$da = new-object System.Data.OleDb.OleDbDataAdapter($cmd) 
+$dt = new-object System.Data.dataTable  
+$da.fill($dt) 
+
+$dt
