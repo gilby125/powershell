@@ -1,21 +1,19 @@
-[String]$var = "Text which appears in the message content"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+[String]$var = "Fedex MKefed08 server"
 $JSONBody = [PSCustomObject][Ordered]@{
-"@type" = "MessageCard"
-"@context" = "<http://schema.org/extensions>"
-"summary" = "My first alert summary!"
-"themeColor" = '0078D7'
-"title" = My first alert."
-"text" = "Here is the detailed alert description!
-Of course you can also add variables: $var"
+    "@type"      = "MessageCard"
+    "@context"   = "http://schema.org/extensions"
+    "summary"    = "My first alert summary!"
+    "themeColor" = '0078D7'
+    "title"      = "fedex alert"
+    "text"       = "FSMS Upload Service has stopped"
 }
-
-$TeamMessageBody = ConvertTo-Json $JSONBody
-
+$TeamMessageBody = ConvertTo-Json $JSONBody -Depth 100
+ 
 $parameters = @{
-"URI" = ''
-"Method" = 'POST'
-"Body" = $TeamMessageBody
-"ContentType" = 'application/json'
+    "URI"         = ''
+    "Method"      = 'POST'
+    "Body"        = $TeamMessageBody
+    "ContentType" = 'application/json'
 }
-
 Invoke-RestMethod @parameters
